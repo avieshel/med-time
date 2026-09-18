@@ -180,9 +180,9 @@ Legend: `[ ]` pending · `[x]` done. Timestamps format: `YYYY-MM-DD HH:MM`.
   - Completed: 2026-09-18 15:02
 
 ### Task 14 — Single-screen live preview ("Set alarm to:" + "Set alarms")
-- [ ] Task 14 — Single-screen live preview
+- [x] Task 14 — Single-screen live preview
   - Started at: 2026-09-18 15:05
-  - Completed: _
+  - Completed: 2026-09-18 15:08
   - Sub-steps:
     - [ ] a. `previewAlarms()` helper (compute + snap each to quarter) + tests
     - [ ] b. App rewrite: editable top time → live "Set alarm to: 1.)/2.)/3.)"
