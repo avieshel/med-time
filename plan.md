@@ -160,9 +160,11 @@ Legend: `[ ]` pending · `[x]` done. Timestamps format: `YYYY-MM-DD HH:MM`.
 ## Phase 7 — Native iOS look
 
 ### Task 12 — iOS-native theme (system font + iOS styling)
-- [ ] Task 12 — iOS-native theme
+- [x] Task 12 — iOS-native theme
   - Started at: 2026-09-18 14:55
-  - Completed: _
+  - Completed: 2026-09-18 14:57
+  - Live at https://avieshel.github.io/med-time/ — confirm look on her
+    iPhone (standalone, light + dark) together with Task 10.
   - Do: SF system font stack; iOS grouped bg (#F2F2F7) + cards;
     iOS blue #007AFF primary, red #FF3B30 destructive; large-title header;
     safe-area insets + viewport-fit=cover; light/dark via
