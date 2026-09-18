@@ -190,9 +190,9 @@ Legend: `[ ]` pending · `[x]` done. Timestamps format: `YYYY-MM-DD HH:MM`.
   - Completed: 2026-09-18 15:15
 
 ### Task 16 — Distinct per-slot alarm labels (`Med-Time 1/2/3`)
-- [ ] Task 16 — Distinct per-slot alarm labels
+- [x] Task 16 — Distinct per-slot alarm labels
   - Started at: 2026-09-18 15:20
-  - Completed: _
+  - Completed: 2026-09-18 15:25
   - Do: replace single `Med` label with prefix `Med-Time` + slot labels
     `Med-Time 1/2/3` (sequence, not time-of-day — times shift daily);
     shortcut contract = delete all `Med-Time*`, create one per slot via
