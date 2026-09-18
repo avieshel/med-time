@@ -1,4 +1,29 @@
-/* Med-Time base: light theme only, system font, readable defaults. */
+/* Med-Time base: Apple system font, iOS grouped background, light + dark. */
+
+:root {
+  color-scheme: light dark;
+  --bg: #f2f2f7;
+  --card: #ffffff;
+  --text: #000000;
+  --secondary-text: #8e8e93;
+  --separator: #e5e5ea;
+  --blue: #007aff;
+  --red: #ff3b30;
+  --gray-fill: #e9e9ee;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #000000;
+    --card: #1c1c1e;
+    --text: #ffffff;
+    --secondary-text: #98989f;
+    --separator: #38383a;
+    --blue: #0a84ff;
+    --red: #ff453a;
+    --gray-fill: #2c2c2e;
+  }
+}
 
 * {
   box-sizing: border-box;
@@ -6,8 +31,12 @@
 
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  background: #fafafa;
-  color: #1a1a1a;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display",
+    system-ui, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
   -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-font-smoothing: antialiased;
 }

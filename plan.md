@@ -156,3 +156,18 @@ Legend: `[ ]` pending · `[x]` done. Timestamps format: `YYYY-MM-DD HH:MM`.
     lint-staged → CI workflow (`npm ci`, build, test).
   - Verify: each added check passes locally before keeping it.
   - Resume note: do NOT bundle all checks at once; smallest useful step first.
+
+## Phase 7 — Native iOS look
+
+### Task 12 — iOS-native theme (system font + iOS styling)
+- [ ] Task 12 — iOS-native theme
+  - Started at: 2026-09-18 14:55
+  - Completed: _
+  - Do: SF system font stack; iOS grouped bg (#F2F2F7) + cards;
+    iOS blue #007AFF primary, red #FF3B30 destructive; large-title header;
+    safe-area insets + viewport-fit=cover; light/dark via
+    prefers-color-scheme; theme-color meta per scheme; manifest colors match.
+  - Verify: `npm run build` + `npm test` green; visual check on iPhone
+    (standalone, light + dark mode).
+  - Resume note: `<input type="time">` renders native iOS wheels already —
+    only needs minimal styling, not a custom picker.

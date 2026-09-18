@@ -1,74 +1,99 @@
-/* Med-Time: big touch targets, large type, high contrast. */
+/* Med-Time: iOS-native styling — grouped background, cards, system colors. */
 
 .app {
   max-width: 28rem;
   margin: 0 auto;
-  padding: 1.5rem 1rem 3rem;
-  font-size: 1.25rem;
+  padding: 0.5rem 1rem calc(2rem + env(safe-area-inset-bottom));
+  padding-top: calc(0.5rem + env(safe-area-inset-top));
+  font-size: 1.1rem;
 }
 
+/* iOS large title */
 .app h1 {
-  text-align: center;
-  font-size: 2rem;
-  margin-bottom: 1.5rem;
+  font-size: 2.125rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0.75rem 0.25rem 1rem;
 }
 
 .card {
-  border: 2px solid #1a1a1a;
-  border-radius: 1rem;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  background: #fff;
+  background: var(--card);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 .card label {
   display: block;
-  font-weight: 700;
+  font-weight: 600;
   margin-bottom: 0.5rem;
 }
 
 .card input[type="time"] {
-  font-size: 2rem;
-  padding: 0.5rem;
+  font-family: inherit;
+  font-size: 1.75rem;
+  color: var(--text);
+  background: transparent;
+  padding: 0.5rem 0;
   width: 100%;
   margin-bottom: 1rem;
-  border: 2px solid #1a1a1a;
-  border-radius: 0.75rem;
+  border: none;
 }
 
+/* iOS filled button */
 button {
-  font-size: 1.4rem;
-  padding: 1rem 1.25rem;
+  font-family: inherit;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 0.9rem 1.25rem;
   border-radius: 0.75rem;
-  border: 2px solid #1a1a1a;
-  background: #f0f0f0;
-  min-height: 3.5rem;
+  border: none;
+  background: var(--gray-fill);
+  color: var(--blue);
+  min-height: 3.25rem;
   cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+button:active {
+  filter: brightness(0.92);
 }
 
 button.primary {
   width: 100%;
-  background: #1a73e8;
-  border-color: #1a73e8;
+  background: var(--blue);
   color: #fff;
-  font-weight: 700;
-  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
 }
 
 .row {
   display: flex;
   gap: 0.75rem;
+  margin-top: 0.75rem;
 }
 
 .row button {
   flex: 1;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
+  font-weight: 400;
+}
+
+.row button.danger {
+  color: var(--red);
 }
 
 .subtitle {
-  margin-top: 0;
+  margin: 0 0 0.5rem;
 }
 
+.subtitle strong {
+  font-variant-numeric: tabular-nums;
+}
+
+/* iOS grouped-list rows */
 .alarms {
   list-style: none;
   padding: 0;
@@ -79,41 +104,71 @@ button.primary {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  margin-bottom: 0.75rem;
+  padding: 0.25rem 0;
+  border-bottom: 1px solid var(--separator);
+}
+
+.alarms li:last-child {
+  border-bottom: none;
 }
 
 .alarm-num {
-  font-size: 1.5rem;
-  font-weight: 700;
-  min-width: 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--secondary-text);
+  min-width: 1.5rem;
   text-align: center;
 }
 
 .alarms input[type="time"] {
   margin-bottom: 0;
+  font-variant-numeric: tabular-nums;
 }
 
 .error {
-  background: #fde8e8;
-  border: 2px solid #c00;
+  color: var(--red);
+  background: var(--card);
   border-radius: 0.75rem;
   padding: 0.75rem 1rem;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .hint {
-  font-size: 1rem;
-  background: #fff8e1;
-  border-radius: 0.5rem;
-  padding: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--secondary-text);
+}
+
+/* iOS section header */
+.history {
+  background: transparent;
+  padding: 0 0.25rem;
 }
 
 .history h2 {
-  font-size: 1.2rem;
-  margin-top: 0;
+  font-size: 0.8rem;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--secondary-text);
+  margin: 0 0 0.35rem;
 }
 
 .history ul {
-  padding-left: 1.25rem;
-  font-size: 1.05rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--card);
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  overflow: hidden;
+}
+
+.history li {
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--separator);
+  font-variant-numeric: tabular-nums;
+}
+
+.history li:last-child {
+  border-bottom: none;
 }

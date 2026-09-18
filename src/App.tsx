@@ -114,7 +114,7 @@ export default function App() {
 
   return (
     <main className="app">
-      <h1>💊 Med-Time</h1>
+      <h1>Med-Time</h1>
 
       {error && (
         <p className="error" role="alert">
@@ -167,7 +167,7 @@ export default function App() {
             <button type="button" onClick={handleResetComputed}>
               Reset times
             </button>
-            <button type="button" onClick={handleStartOver}>
+            <button type="button" className="danger" onClick={handleStartOver}>
               Start over
             </button>
           </div>
