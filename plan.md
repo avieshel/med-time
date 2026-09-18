@@ -195,9 +195,9 @@ Legend: `[ ]` pending · `[x]` done. Timestamps format: `YYYY-MM-DD HH:MM`.
   - Completed: 2026-09-18 15:25
 
 ### Task 17 — Fix URL-scheme input bug + trim README + verified shortcut steps
-- [ ] Task 17 — Fix input bug, trim README, verified shortcut steps
+- [x] Task 17 — Fix input bug, trim README, verified shortcut steps
   - Started at: 2026-09-18 15:30
-  - Completed: _
+  - Completed: 2026-09-18 15:35
   - Do: per Apple ("Run a shortcut using a URL scheme"), payload belongs in
     `text=` with `input=text` — we wrongly put times in `input=` so the
     shortcut got nothing. Fix builder + test. Remove bogus "Receive input"
