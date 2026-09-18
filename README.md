@@ -14,7 +14,7 @@ creates real native Clock alarms.
 2. Taps **"I took my pill"** — time defaults to now, adjustable.
 3. App shows the 3 computed times, each editable before confirming.
 4. Taps **"Set alarms"** → opens the `Med Alarms` Shortcut with the times.
-5. The Shortcut deletes old `Med` alarms and creates the new ones.
+5. The Shortcut deletes old `Med-Time` alarms and creates the new ones.
    Real iOS alarms, real sound.
 
 ## Prerequisites
@@ -58,14 +58,20 @@ Shortcut name must be exactly `Med Alarms` (matches the deep link).
 3. Add actions in this order:
    - **Split** `Shortcut Input` by **Custom** separator `,`
      (this gives 3 items: the 3 alarm times).
-   - **Find `Alarms`** with filter `Name` `contains` `Med`,
+   - **Find `Alarms`** with filter `Name` `contains` `Med-Time`,
      then **Delete** `Alarms` (the found ones) — clears yesterday's alarms.
+     This is the whole lifecycle: every run wipes the app's 3 alarms first,
+     so they can never pile up. Nothing else labeled `Med-Time`, and no
+     other alarms are touched.
    - **Repeat with Each** in `Split Text result`:
-     - **Create Alarm** with Time = `Repeat Item`, Label = `Med`,
-       toggle the alarm ON.
+     - **Create Alarm** with Time = `Repeat Item`,
+       Label = `Med-Time Repeat Index` (type `Med-Time ` then insert the
+       `Repeat Index` variable — gives `Med-Time 1`, `Med-Time 2`,
+       `Med-Time 3`), toggle the alarm ON, non-repeating.
    - **End Repeat**.
-4. Save (Done). Test: in the PWA tap **"🔔 Set alarms"** → Shortcuts
-   opens and runs → check the Clock app: 3 alarms labeled `Med`, ON.
+4. Save (Done). Test: in the PWA tap **"Set alarms"** → Shortcuts
+   opens and runs → check the Clock app: exactly 3 alarms labeled
+   `Med-Time 1`, `Med-Time 2`, `Med-Time 3`, ON.
 
 If **Create Alarm** asks for confirmation each run, turn off
 **Show When Run** on that action.
