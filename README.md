@@ -1,116 +1,67 @@
-# Med-Time — Medicine Alarm PWA
+# Med-Time
 
-A tiny installable PWA for iPhone that computes medicine alarm times
-(first pill +3h / +6h / +9h) and hands them to iOS Shortcuts, which
-creates real native Clock alarms.
+Med-Time helps Mom take her medicine on time. She takes the first pill when
+she wakes up (often around 09:00), then needs the next doses every 3 hours
+(12:00, 15:00, 18:00). On late days the first pill shifts (e.g. 10:00) and
+all following alarms shift with it — re-setting them by hand in the Clock
+app is fiddly, so this app does the math.
 
-> iOS gives PWAs **no API** to create Clock alarms directly.
-> The app computes the times; a one-time iOS Shortcut (installed by you)
-> creates the actual alarms via a `shortcuts://run-shortcut?...` deep link.
+How it works: Mom opens the app, sets the first-pill time, sees the 3 alarm
+times, and taps **Set alarms**. The app hands the times to a one-time iOS
+Shortcut (built once, below), which deletes the previous Med-Time alarms and
+creates 3 real Clock alarms labeled `Med-Time 1`, `Med-Time 2`, `Med-Time 3`.
+iOS gives web apps no way to touch alarms directly — the Shortcut is the
+bridge. Live at https://avieshel.github.io/med-time/.
 
-## How it works
+## Put it on her iPhone
 
-1. Mom opens the PWA from the home screen (works offline).
-2. Taps **"I took my pill"** — time defaults to now, adjustable.
-3. App shows the 3 computed times, each editable before confirming.
-4. Taps **"Set alarms"** → opens the `Med Alarms` Shortcut with the times.
-5. The Shortcut deletes old `Med-Time` alarms and creates the new ones.
-   Real iOS alarms, real sound.
+1. Open the live URL above in Safari (iOS 16.4+).
+2. Share → **Add to Home Screen** → Add.
+3. Open the Med-Time icon from the home screen.
 
-## Prerequisites
+## Build the `Med Alarms` shortcut (once, on her iPhone)
 
-- Node 22 (`node --version`), npm 11 (`npm --version`)
-- Git
-- Optional but recommended: `trufflehog` for secret scanning
-  (`brew install trufflehog`) — same convention as the `oasis` repo.
+The shortcut name must be exactly `Med Alarms` — the app calls it by name.
+Action names below are the ones in the Shortcuts editor's action list
+(tap `+` / search to add each one).
 
-## Quick start
+1. Open **Shortcuts** → `+` (top right) → tap the title → **Rename** →
+   `Med Alarms` → Done.
+2. Add **Split Text**. Tap its input field and choose the **Shortcut Input**
+   variable (the times arrive here automatically from the app — no receiving
+   action needed). Set the separator to **Custom** `,`.
+3. Add **Find Alarms**. Tap **Add Filter** → `Name` `contains` `Med-Time`.
+4. Add **Delete Alarms** right after (it automatically takes the alarms
+   found in step 3). This is the whole anti-bloat lifecycle: every run wipes
+   the app's old alarms before creating new ones. Nothing else is touched —
+   just don't label any other alarm `Med-Time`.
+   - If you can't find **Delete Alarms**, update to the latest iOS first.
+5. Add **Repeat with Each**. ⚠️ It will default to repeating over the
+   deleted alarms — tap its input and switch it to the **Split Text** result
+   (magic variable) so it repeats over the 3 times instead.
+6. Inside the repeat, add **Create Alarm**:
+   - Time = **Repeat Item** (default).
+   - Label: type `Med-Time ` (with a space) then insert the **Repeat Index**
+     variable → reads `Med-Time Repeat Index`, producing `Med-Time 1`,
+     `Med-Time 2`, `Med-Time 3`.
+   - Repeat = Never/None, alarm toggled ON.
+   - Tap `>` on the action and turn off **Show When Run** so it never asks
+     for confirmation.
+7. Tap **Done**.
 
-```sh
-cd /Users/avieshel/dev/typescript/med-time
-npm install
-npm run dev        # local dev server
-npm run build      # production build
-npm run preview    # preview the production build
-npm test           # unit tests (time math)
-```
+First run will ask for permission to access Clock/alarms — tap **Allow**
+(and allow always / don't ask again if offered).
 
-> These scripts exist after build Task 1 (scaffolding) in `plan.md`.
-> Until then this repo holds only `README.md` and `plan.md`.
+## Test it (without the app)
 
-## iPhone install (PWA)
-
-1. Deploy the built app to HTTPS (GitHub Pages / Netlify — see Task 9).
-2. On her iPhone, open the URL in Safari.
-3. Share → **Add to Home Screen**.
-4. Open from the home-screen icon (standalone, offline-capable).
-
-Requires iOS 16.4+ for full PWA behavior.
-
-## One-time Shortcut setup (on her phone)
-
-Shortcut name must be exactly `Med Alarms` (matches the deep link).
-
-1. Open **Shortcuts** → `+` (new shortcut) → rename to `Med Alarms`.
-2. Add **Receive `Shortcut Input`** from Nowhere; set input type to **Text**.
-   (In the shortcut settings — ⓘ — enable **Show in Share Sheet** off;
-   nothing else needed. The PWA passes text like `12:00,15:00,18:00`.)
-3. Add actions in this order:
-   - **Split** `Shortcut Input` by **Custom** separator `,`
-     (this gives 3 items: the 3 alarm times).
-   - **Find `Alarms`** with filter `Name` `contains` `Med-Time`,
-     then **Delete** `Alarms` (the found ones) — clears yesterday's alarms.
-     This is the whole lifecycle: every run wipes the app's 3 alarms first,
-     so they can never pile up. Nothing else labeled `Med-Time`, and no
-     other alarms are touched.
-   - **Repeat with Each** in `Split Text result`:
-     - **Create Alarm** with Time = `Repeat Item`,
-       Label = `Med-Time Repeat Index` (type `Med-Time ` then insert the
-       `Repeat Index` variable — gives `Med-Time 1`, `Med-Time 2`,
-       `Med-Time 3`), toggle the alarm ON, non-repeating.
-   - **End Repeat**.
-4. Save (Done). Test: in the PWA tap **"Set alarms"** → Shortcuts
-   opens and runs → check the Clock app: exactly 3 alarms labeled
-   `Med-Time 1`, `Med-Time 2`, `Med-Time 3`, ON.
-
-If **Create Alarm** asks for confirmation each run, turn off
-**Show When Run** on that action.
-
-Exact action list with screenshots/notes will be added during Task 10.
-
-## Project structure (planned)
+Paste this into Safari and go — it must create the 3 alarms directly:
 
 ```text
-med-time/
-├── README.md          # this file
-├── plan.md            # granular, resumable build checklist
-├── index.html
-├── src/
-│   ├── lib/schedule.ts   # pure time math (+3h/+6h/+9h), unit-tested
-│   ├── lib/storage.ts    # localStorage state (today + history)
-│   ├── lib/shortcuts.ts  # shortcuts:// URL builder
-│   └── ui/               # one big-button screen + editable times
-├── public/            # PWA icons
-└── vite.config.ts     # vite-plugin-pwa (manifest + service worker)
+shortcuts://run-shortcut?name=Med%20Alarms&input=text&text=12%3A00%2C15%3A00%2C18%3A00
 ```
 
-State is local-first (`localStorage`). No backend, no accounts, no secrets.
+Then open Clock: exactly `Med-Time 1` (12:00), `Med-Time 2` (15:00),
+`Med-Time 3` (18:00), all ON. Run it again — still exactly 3. If that works,
+the app's **Set alarms** button will work too.
 
-## Safety / secrets (minimal, borrowed from `oasis`)
-
-- Never commit secrets. This app needs none (no API keys, no backend).
-- `.gitignore` covers `node_modules/`, `dist/`, `*.log`, `.env`, `coverage/`.
-- Before first push, optional manual scan (same tool as `oasis`):
-  `trufflehog filesystem --no-verification .`
-- Heavier checks (husky pre-commit hook + lint-staged + CI) are
-  **deferred** on purpose — see `plan.md` Task 11. Small and simple first.
-
-## Deploy
-
-Static hosting only (no server). **Live on GitHub Pages:**
-https://avieshel.github.io/med-time/
-
-Every push to `main` runs `.github/workflows/deploy.yml`
-(`npm ci` → `npm test` → `npm run build` → deploy `dist/`).
-PWA requires HTTPS, which Pages provides. Note `base: '/med-time/'`
-in `vite.config.ts` — required for the project-subpath URL.
+URL format per Apple: <https://support.apple.com/guide/shortcuts/run-a-shortcut-from-a-url-apd624386f42/ios>

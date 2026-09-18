@@ -19,10 +19,14 @@ export const ALARM_LABELS = [
 ] as const;
 
 export function buildShortcutUrl(times: [string, string, string]): string {
+  // Apple URL-scheme spec: `input` is the MODE ("text" or "clipboard"),
+  // the payload goes in `text`. (Passing the payload as `input=` delivers
+  // nothing to the shortcut.)
+  // Ref: https://support.apple.com/guide/shortcuts/run-a-shortcut-from-a-url-apd624386f42/ios
   const input = times.join(",");
   return (
     `shortcuts://run-shortcut?name=${encodeURIComponent(SHORTCUT_NAME)}` +
-    `&input=${encodeURIComponent(input)}`
+    `&input=text&text=${encodeURIComponent(input)}`
   );
 }
 

@@ -193,6 +193,21 @@ Legend: `[ ]` pending · `[x]` done. Timestamps format: `YYYY-MM-DD HH:MM`.
 - [x] Task 16 — Distinct per-slot alarm labels
   - Started at: 2026-09-18 15:20
   - Completed: 2026-09-18 15:25
+
+### Task 17 — Fix URL-scheme input bug + trim README + verified shortcut steps
+- [ ] Task 17 — Fix input bug, trim README, verified shortcut steps
+  - Started at: 2026-09-18 15:30
+  - Completed: _
+  - Do: per Apple ("Run a shortcut using a URL scheme"), payload belongs in
+    `text=` with `input=text` — we wrongly put times in `input=` so the
+    shortcut got nothing. Fix builder + test. Remove bogus "Receive input"
+    step (input auto-arrives as Shortcut Input). Trim README to: what the
+    app is + iPhone install + corrected shortcut build (explicit Repeat
+    input wiring, Repeat Index labels, Allow-access + Show-When-Run notes,
+    manual Safari test URL).
+  - Verify: `npm test` + `npm run build` green, push, deploy green; user
+    retries shortcut setup on her phone.
+  - Apple ref: https://support.apple.com/guide/shortcuts/run-a-shortcut-from-a-url-apd624386f42/ios
   - Do: replace single `Med` label with prefix `Med-Time` + slot labels
     `Med-Time 1/2/3` (sequence, not time-of-day — times shift daily);
     shortcut contract = delete all `Med-Time*`, create one per slot via
