@@ -185,9 +185,9 @@ Legend: `[ ]` pending · `[x]` done. Timestamps format: `YYYY-MM-DD HH:MM`.
   - Completed: 2026-09-18 15:08
 
 ### Task 15 — 5-day history that survives day rollover + Clear with confirm
-- [ ] Task 15 — History rollover + Clear button
+- [x] Task 15 — History rollover + Clear button
   - Started at: 2026-09-18 15:12
-  - Completed: _
+  - Completed: 2026-09-18 15:15
   - Sub-steps:
     - [ ] a. `takeStaleToday()` in storage.ts (+ tests): on load, a past-day
       plan is archived to history instead of silently dropped (display stays
