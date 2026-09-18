@@ -4,6 +4,7 @@ import {
   formatTime,
   nowRounded,
   parseTimeInput,
+  previewAlarms,
   roundToQuarter,
 } from "./schedule";
 
@@ -87,5 +88,28 @@ describe("roundToQuarter", () => {
     const d = roundToQuarter(dayAt(23, 53));
     expect(formatTime(d)).toBe("00:00");
     expect(d.getDate()).toBe(19);
+  });
+});
+
+describe("previewAlarms", () => {
+  it("snaps each alarm (09:07 → 12:00 / 15:00 / 18:00)", () => {
+    const [a, b, c] = previewAlarms(dayAt(9, 7));
+    expect(formatTime(a)).toBe("12:00");
+    expect(formatTime(b)).toBe("15:00");
+    expect(formatTime(c)).toBe("18:00");
+  });
+
+  it("rounds up (09:08 → 12:15 / 15:15 / 18:15)", () => {
+    const [a, b, c] = previewAlarms(dayAt(9, 8));
+    expect(formatTime(a)).toBe("12:15");
+    expect(formatTime(b)).toBe("15:15");
+    expect(formatTime(c)).toBe("18:15");
+  });
+
+  it("leaves exact quarters alone (10:00 → 13:00 / 16:00 / 19:00)", () => {
+    const [a, b, c] = previewAlarms(dayAt(10));
+    expect(formatTime(a)).toBe("13:00");
+    expect(formatTime(b)).toBe("16:00");
+    expect(formatTime(c)).toBe("19:00");
   });
 });

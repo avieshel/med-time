@@ -116,13 +116,22 @@ button.primary {
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--secondary-text);
-  min-width: 1.5rem;
-  text-align: center;
+  min-width: 2.25rem;
 }
 
-.alarms input[type="time"] {
-  margin-bottom: 0;
+.alarm-time {
+  font-size: 1.75rem;
   font-variant-numeric: tabular-nums;
+}
+
+button:disabled {
+  opacity: 0.4;
+}
+
+.confirmation {
+  color: var(--green);
+  font-weight: 600;
+  margin: 0 0 0.75rem;
 }
 
 .error {

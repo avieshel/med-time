@@ -50,3 +50,12 @@ export function roundToQuarter(d: Date): Date {
   out.setMinutes(snapped, 0, 0);
   return out;
 }
+
+/**
+ * Live preview for the opener screen: +3h/+6h/+9h, each snapped to the
+ * nearest 15 minutes. (Alarms exactly 3h apart share minutes, so snapping
+ * can never collapse two alarms onto the same time.)
+ */
+export function previewAlarms(firstPill: Date): [Date, Date, Date] {
+  return computeAlarms(firstPill).map(roundToQuarter) as [Date, Date, Date];
+}

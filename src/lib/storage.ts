@@ -11,6 +11,8 @@ export interface TodayState {
   alarmIsos: [string, string, string];
   /** YYYY-MM-DD of the day this state belongs to. */
   day: string;
+  /** True once the user tapped "Set alarms" for this exact plan. */
+  alarmsSent?: boolean;
 }
 
 export interface HistoryEntry {

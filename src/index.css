@@ -9,6 +9,7 @@
   --separator: #e5e5ea;
   --blue: #007aff;
   --red: #ff3b30;
+  --green: #248a3d;
   --gray-fill: #e9e9ee;
 }
 
@@ -21,6 +22,7 @@
     --separator: #38383a;
     --blue: #0a84ff;
     --red: #ff453a;
+    --green: #30d158;
     --gray-fill: #2c2c2e;
   }
 }

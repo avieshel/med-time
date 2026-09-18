@@ -178,6 +178,20 @@ Legend: `[ ]` pending · `[x]` done. Timestamps format: `YYYY-MM-DD HH:MM`.
 - [x] Task 13 — Quarter-hour defaults + "Remind me" copy
   - Started at: 2026-09-18 15:00
   - Completed: 2026-09-18 15:02
+
+### Task 14 — Single-screen live preview ("Set alarm to:" + "Set alarms")
+- [ ] Task 14 — Single-screen live preview
+  - Started at: 2026-09-18 15:05
+  - Completed: _
+  - Sub-steps:
+    - [ ] a. `previewAlarms()` helper (compute + snap each to quarter) + tests
+    - [ ] b. App rewrite: editable top time → live "Set alarm to: 1.)/2.)/3.)"
+      preview → "Set alarms" button (+ "Alarms set ✓" confirmation)
+    - [ ] c. `npm test` + `npm run build` green, push, deploy goes green
+  - Scope notes: per-alarm editing and Reset/Start-over removed (preview is
+    always derived — nothing to reset); history section kept.
+  - Verify: open live URL, type 09:07 → preview 12:00/15:00/18:00;
+    tap Set alarms → Shortcuts opens; back in app → confirmation shown.
   - Do: `roundToQuarter` in schedule.ts; default first-pill time rounds to
     nearest 15 min (explicit user input always kept exact — full minute
     control retained); `step={900}` hint on time inputs; schedule screen

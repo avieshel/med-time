@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import {
-  computeAlarms,
   formatTime,
   nowRounded,
   parseTimeInput,
+  previewAlarms,
   roundToQuarter,
 } from "./lib/schedule";
 import { buildShortcutUrl, isIOS } from "./lib/shortcuts";
 import {
   appendHistory,
-  clearToday,
   dayKey,
   loadHistory,
   loadToday,
@@ -31,86 +30,62 @@ function toHistory(s: TodayState): HistoryEntry {
   };
 }
 
+function defaultDraft(): string {
+  return formatTime(roundToQuarter(nowRounded()));
+}
+
 export default function App() {
   const [today, setToday] = useState<TodayState | null>(null);
-  const [draftFirst, setDraftFirst] = useState<string>(() =>
-    formatTime(roundToQuarter(nowRounded())),
-  );
+  const [draftFirst, setDraftFirst] = useState<string>(defaultDraft);
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [error, setError] = useState<string>("");
 
   useEffect(() => {
-    setToday(loadToday());
+    const stored = loadToday();
+    setToday(stored);
+    if (stored) setDraftFirst(formatTime(new Date(stored.firstPillIso)));
     setHistory(loadHistory());
   }, []);
 
-  const alarms: [Date, Date, Date] | null = today
-    ? (today.alarmIsos.map((iso) => new Date(iso)) as [Date, Date, Date])
+  const parsed = parseTimeInput(draftFirst);
+  const preview: [Date, Date, Date] | null = parsed
+    ? previewAlarms(parsed)
     : null;
+  const previewTimes = preview?.map(formatTime) as
+    | [string, string, string]
+    | undefined;
 
-  function persist(next: TodayState) {
-    saveToday(next);
-    setToday(next);
-    setError("");
-  }
+  // Confirmation: stored plan was sent and the input still matches it.
+  const confirmed =
+    !!today?.alarmsSent &&
+    !!parsed &&
+    !!previewTimes &&
+    formatTime(new Date(today.firstPillIso)) === formatTime(parsed) &&
+    today.alarmIsos
+      .map((iso) => formatTime(new Date(iso)))
+      .every((t, i) => t === previewTimes[i]);
 
-  function handleStartDay() {
-    const first = parseTimeInput(draftFirst);
-    if (!first) {
+  function handleSetAlarms() {
+    if (!parsed || !preview || !previewTimes) {
       setError("Please enter a valid time, e.g. 09:00.");
       return;
     }
-    if (today) appendHistory(toHistory(today)); // keep the replaced plan
-    persist({
-      firstPillIso: first.toISOString(),
-      alarmIsos: computeAlarms(first).map((d) => d.toISOString()) as [
+    if (today && !confirmed) appendHistory(toHistory(today)); // archive replaced plan
+    const next: TodayState = {
+      firstPillIso: parsed.toISOString(),
+      alarmIsos: preview.map((d) => d.toISOString()) as [
         string,
         string,
         string,
       ],
-      day: dayKey(first),
-    });
+      day: dayKey(parsed),
+      alarmsSent: true,
+    };
+    saveToday(next);
+    setToday(next);
     setHistory(loadHistory());
-  }
-
-  function handleEditAlarm(index: number, hhmm: string) {
-    if (!today || !alarms) return;
-    const parsed = parseTimeInput(hhmm, alarms[index]); // keep the alarm's date (midnight rollover)
-    if (!parsed) {
-      setError("Please enter a valid time, e.g. 13:00.");
-      return;
-    }
-    const alarmIsos = [...today.alarmIsos] as [string, string, string];
-    alarmIsos[index] = parsed.toISOString();
-    persist({ ...today, alarmIsos });
-  }
-
-  function handleResetComputed() {
-    if (!today) return;
-    const first = new Date(today.firstPillIso);
-    persist({
-      ...today,
-      alarmIsos: computeAlarms(first).map((d) => d.toISOString()) as [
-        string,
-        string,
-        string,
-      ],
-    });
-  }
-
-  function handleStartOver() {
-    if (today) appendHistory(toHistory(today));
-    clearToday();
-    setToday(null);
-    setHistory(loadHistory());
-    setDraftFirst(formatTime(roundToQuarter(nowRounded())));
     setError("");
-  }
-
-  function handleSetAlarms() {
-    if (!alarms) return;
-    const times = alarms.map(formatTime) as [string, string, string];
-    window.location.href = buildShortcutUrl(times);
+    window.location.href = buildShortcutUrl(previewTimes);
   }
 
   return (
@@ -123,62 +98,50 @@ export default function App() {
         </p>
       )}
 
-      {!today || !alarms ? (
-        <section className="card">
-          <label htmlFor="first-pill">First pill taken at:</label>
-          <input
-            id="first-pill"
-            type="time"
-            step={900}
-            value={draftFirst}
-            onChange={(e) => setDraftFirst(e.target.value)}
-          />
-          <button type="button" className="primary" onClick={handleStartDay}>
-            I took my pill
-          </button>
-        </section>
-      ) : (
-        <section className="card">
-          <p className="subtitle">
-            First pill: <strong>{formatTime(new Date(today.firstPillIso))}</strong>
+      <section className="card">
+        <label htmlFor="first-pill">First pill taken at:</label>
+        <input
+          id="first-pill"
+          type="time"
+          step={900}
+          value={draftFirst}
+          onChange={(e) => setDraftFirst(e.target.value)}
+        />
+
+        <p className="subtitle">Set alarm to:</p>
+        <ol className="alarms">
+          {[0, 1, 2].map((i) => (
+            <li key={i}>
+              <span className="alarm-num">{i + 1}.)</span>
+              <span className="alarm-time">
+                {previewTimes ? previewTimes[i] : "--:--"}
+              </span>
+            </li>
+          ))}
+        </ol>
+
+        {confirmed && today && (
+          <p className="confirmation" role="status">
+            ✓ Alarms set for {previewTimes!.join(", ")}
           </p>
-          <p className="subtitle">
-            This will set <strong>3 alarms</strong> to remind you:
+        )}
+
+        <button
+          type="button"
+          className="primary"
+          onClick={handleSetAlarms}
+          disabled={!preview}
+        >
+          Set alarms
+        </button>
+
+        {!isIOS() && previewTimes && (
+          <p className="hint">
+            On iPhone this opens the Shortcuts app to create real alarms. On
+            this device, set these times manually: {previewTimes.join(", ")}.
           </p>
-          <ol className="alarms">
-            {alarms.map((alarm, i) => (
-              <li key={i}>
-                <span className="alarm-num">{i + 1}</span>
-                <input
-                  type="time"
-                  step={900}
-                  aria-label={`Alarm ${i + 1}`}
-                  value={formatTime(alarm)}
-                  onChange={(e) => handleEditAlarm(i, e.target.value)}
-                />
-              </li>
-            ))}
-          </ol>
-          <button type="button" className="primary" onClick={handleSetAlarms}>
-            Remind me
-          </button>
-          {!isIOS() && (
-            <p className="hint">
-              On iPhone this opens the Shortcuts app to create real alarms.
-              On this device, set these times manually:{" "}
-              {alarms.map(formatTime).join(", ")}.
-            </p>
-          )}
-          <div className="row">
-            <button type="button" onClick={handleResetComputed}>
-              Reset times
-            </button>
-            <button type="button" className="danger" onClick={handleStartOver}>
-              Start over
-            </button>
-          </div>
-        </section>
-      )}
+        )}
+      </section>
 
       {history.length > 0 && (
         <section className="card history">
