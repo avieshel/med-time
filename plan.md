@@ -183,6 +183,20 @@ Legend: `[ ]` pending · `[x]` done. Timestamps format: `YYYY-MM-DD HH:MM`.
 - [x] Task 14 — Single-screen live preview
   - Started at: 2026-09-18 15:05
   - Completed: 2026-09-18 15:08
+
+### Task 15 — 5-day history that survives day rollover + Clear with confirm
+- [ ] Task 15 — History rollover + Clear button
+  - Started at: 2026-09-18 15:12
+  - Completed: _
+  - Sub-steps:
+    - [ ] a. `takeStaleToday()` in storage.ts (+ tests): on load, a past-day
+      plan is archived to history instead of silently dropped (display stays
+      at last 5).
+    - [ ] b. Red "Clear" button under "Set alarms" with native confirm
+      dialog; archives today's plan to history, then wipes it.
+    - [ ] c. `npm test` + `npm run build` green, push, deploy goes green.
+  - Verify: set a plan, fake tomorrow (or wait a day) → yesterday appears in
+    Previous days; tap Clear → confirm → screen resets, entry kept.
   - Sub-steps:
     - [ ] a. `previewAlarms()` helper (compute + snap each to quarter) + tests
     - [ ] b. App rewrite: editable top time → live "Set alarm to: 1.)/2.)/3.)"

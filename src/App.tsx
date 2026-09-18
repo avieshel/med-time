@@ -10,10 +10,12 @@ import {
 import { buildShortcutUrl, isIOS } from "./lib/shortcuts";
 import {
   appendHistory,
+  clearToday,
   dayKey,
   loadHistory,
   loadToday,
   saveToday,
+  takeStaleToday,
   type HistoryEntry,
   type TodayState,
 } from "./lib/storage";
@@ -42,6 +44,8 @@ export default function App() {
 
   useEffect(() => {
     const stored = loadToday();
+    const stale = takeStaleToday(); // yesterday's plan → history, not lost
+    if (stale) appendHistory(toHistory(stale));
     setToday(stored);
     if (stored) setDraftFirst(formatTime(new Date(stored.firstPillIso)));
     setHistory(loadHistory());
@@ -64,6 +68,20 @@ export default function App() {
     today.alarmIsos
       .map((iso) => formatTime(new Date(iso)))
       .every((t, i) => t === previewTimes[i]);
+
+  function handleClear() {
+    if (!today) return;
+    const ok = window.confirm(
+      "Clear today's alarms? They will be kept under Previous days.",
+    );
+    if (!ok) return;
+    appendHistory(toHistory(today));
+    clearToday();
+    setToday(null);
+    setHistory(loadHistory());
+    setDraftFirst(defaultDraft());
+    setError("");
+  }
 
   function handleSetAlarms() {
     if (!parsed || !preview || !previewTimes) {
@@ -134,6 +152,14 @@ export default function App() {
         >
           Set alarms
         </button>
+
+        {today && (
+          <div className="row">
+            <button type="button" className="danger" onClick={handleClear}>
+              Clear
+            </button>
+          </div>
+        )}
 
         {!isIOS() && previewTimes && (
           <p className="hint">

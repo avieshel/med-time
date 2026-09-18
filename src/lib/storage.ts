@@ -74,6 +74,29 @@ export function clearToday(): void {
   safeRemove(TODAY_KEY);
 }
 
+/**
+ * Remove and return the stored plan if it belongs to a past day, so the
+ * app can archive it to history instead of silently dropping it.
+ * Returns null when the stored plan is for today (or when none exists).
+ */
+export function takeStaleToday(now: Date = new Date()): TodayState | null {
+  const raw = safeGet(TODAY_KEY);
+  if (!raw) return null;
+  try {
+    const state = JSON.parse(raw) as TodayState;
+    if (!state.firstPillIso || state.alarmIsos?.length !== 3) {
+      safeRemove(TODAY_KEY); // corrupt — drop it
+      return null;
+    }
+    if (state.day === dayKey(now)) return null; // current — leave it
+    safeRemove(TODAY_KEY);
+    return state;
+  } catch {
+    safeRemove(TODAY_KEY);
+    return null;
+  }
+}
+
 export function loadHistory(): HistoryEntry[] {
   const raw = safeGet(HISTORY_KEY);
   if (!raw) return [];

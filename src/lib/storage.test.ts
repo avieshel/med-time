@@ -6,6 +6,7 @@ import {
   loadHistory,
   loadToday,
   saveToday,
+  takeStaleToday,
   type TodayState,
 } from "./storage";
 
@@ -59,6 +60,26 @@ describe("loadToday / saveToday", () => {
     saveToday(stateFor(dayKey(now)));
     clearToday();
     expect(loadToday(now)).toBeNull();
+  });
+});
+
+describe("takeStaleToday", () => {
+  it("returns null and keeps a current-day state", () => {
+    const now = new Date(2026, 8, 18, 10, 0);
+    saveToday(stateFor(dayKey(now)));
+    expect(takeStaleToday(now)).toBeNull();
+    expect(loadToday(now)).toEqual(stateFor("2026-09-18"));
+  });
+
+  it("removes and returns a past-day state", () => {
+    saveToday(stateFor("2026-09-17"));
+    const stale = takeStaleToday(new Date(2026, 8, 18));
+    expect(stale).toEqual(stateFor("2026-09-17"));
+    expect(loadToday(new Date(2026, 8, 18))).toBeNull();
+  });
+
+  it("returns null when nothing stored", () => {
+    expect(takeStaleToday(new Date(2026, 8, 18))).toBeNull();
   });
 });
 
