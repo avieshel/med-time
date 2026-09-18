@@ -124,8 +124,10 @@ Legend: `[ ]` pending · `[x]` done. Timestamps format: `YYYY-MM-DD HH:MM`.
 ## Phase 5 — Ship + field test
 
 ### Task 9 — Deploy to HTTPS static host
-- [ ] Task 9 — Deploy to HTTPS static host
+- [x] Task 9 — Deploy to HTTPS static host
   - Started at: 2026-09-18 14:45 (target = GitHub Pages avieshel/med-time)
+  - Completed: 2026-09-18 14:48
+  - Live URL: https://avieshel.github.io/med-time/
   - Completed: _
   - Do: pick GitHub Pages or Netlify; document exact commands in README;
     confirm HTTPS + SW active.

@@ -101,8 +101,10 @@ State is local-first (`localStorage`). No backend, no accounts, no secrets.
 
 ## Deploy
 
-Static hosting only (no server). **Chosen target: GitHub Pages**
-(deferred — not deployed yet). When ready: add `base: '/<repo>/'` to
-`vite.config.ts` if serving from a project subpath, `npm run build`,
-and publish `dist/` via Pages. The PWA requires HTTPS, which Pages
-provides.
+Static hosting only (no server). **Live on GitHub Pages:**
+https://avieshel.github.io/med-time/
+
+Every push to `main` runs `.github/workflows/deploy.yml`
+(`npm ci` → `npm test` → `npm run build` → deploy `dist/`).
+PWA requires HTTPS, which Pages provides. Note `base: '/med-time/'`
+in `vite.config.ts` — required for the project-subpath URL.
