@@ -175,9 +175,9 @@ Legend: `[ ]` pending · `[x]` done. Timestamps format: `YYYY-MM-DD HH:MM`.
     only needs minimal styling, not a custom picker.
 
 ### Task 13 — Quarter-hour defaults + "Remind me" copy
-- [ ] Task 13 — Quarter-hour defaults + "Remind me" copy
+- [x] Task 13 — Quarter-hour defaults + "Remind me" copy
   - Started at: 2026-09-18 15:00
-  - Completed: _
+  - Completed: 2026-09-18 15:02
   - Do: `roundToQuarter` in schedule.ts; default first-pill time rounds to
     nearest 15 min (explicit user input always kept exact — full minute
     control retained); `step={900}` hint on time inputs; schedule screen
