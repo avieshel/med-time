@@ -38,3 +38,15 @@ export function nowRounded(): Date {
   d.setSeconds(0, 0);
   return d;
 }
+
+/**
+ * Round to the nearest 15 minutes (:00/:15/:30/:45). Used for defaults —
+ * explicit user input is always kept exact. Handles hour/day rollover.
+ */
+export function roundToQuarter(d: Date): Date {
+  const out = new Date(d);
+  const mins = out.getMinutes();
+  const snapped = Math.round(mins / 15) * 15;
+  out.setMinutes(snapped, 0, 0);
+  return out;
+}

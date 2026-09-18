@@ -4,6 +4,7 @@ import {
   formatTime,
   nowRounded,
   parseTimeInput,
+  roundToQuarter,
 } from "./schedule";
 
 function dayAt(hh: number, mm = 0): Date {
@@ -62,5 +63,29 @@ describe("nowRounded", () => {
     const d = nowRounded();
     expect(d.getSeconds()).toBe(0);
     expect(d.getMilliseconds()).toBe(0);
+  });
+});
+
+describe("roundToQuarter", () => {
+  it("rounds down (09:07 → 09:00)", () => {
+    expect(formatTime(roundToQuarter(dayAt(9, 7)))).toBe("09:00");
+  });
+
+  it("rounds up (09:08 → 09:15)", () => {
+    expect(formatTime(roundToQuarter(dayAt(9, 8)))).toBe("09:15");
+  });
+
+  it("keeps exact quarters (09:30 → 09:30)", () => {
+    expect(formatTime(roundToQuarter(dayAt(9, 30)))).toBe("09:30");
+  });
+
+  it("rolls the hour (09:53 → 10:00)", () => {
+    expect(formatTime(roundToQuarter(dayAt(9, 53)))).toBe("10:00");
+  });
+
+  it("rolls midnight (23:53 → 00:00 next day)", () => {
+    const d = roundToQuarter(dayAt(23, 53));
+    expect(formatTime(d)).toBe("00:00");
+    expect(d.getDate()).toBe(19);
   });
 });

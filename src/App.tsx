@@ -5,6 +5,7 @@ import {
   formatTime,
   nowRounded,
   parseTimeInput,
+  roundToQuarter,
 } from "./lib/schedule";
 import { buildShortcutUrl, isIOS } from "./lib/shortcuts";
 import {
@@ -33,7 +34,7 @@ function toHistory(s: TodayState): HistoryEntry {
 export default function App() {
   const [today, setToday] = useState<TodayState | null>(null);
   const [draftFirst, setDraftFirst] = useState<string>(() =>
-    formatTime(nowRounded()),
+    formatTime(roundToQuarter(nowRounded())),
   );
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [error, setError] = useState<string>("");
@@ -102,7 +103,7 @@ export default function App() {
     clearToday();
     setToday(null);
     setHistory(loadHistory());
-    setDraftFirst(formatTime(nowRounded()));
+    setDraftFirst(formatTime(roundToQuarter(nowRounded())));
     setError("");
   }
 
@@ -128,6 +129,7 @@ export default function App() {
           <input
             id="first-pill"
             type="time"
+            step={900}
             value={draftFirst}
             onChange={(e) => setDraftFirst(e.target.value)}
           />
@@ -140,12 +142,16 @@ export default function App() {
           <p className="subtitle">
             First pill: <strong>{formatTime(new Date(today.firstPillIso))}</strong>
           </p>
+          <p className="subtitle">
+            This will set <strong>3 alarms</strong> to remind you:
+          </p>
           <ol className="alarms">
             {alarms.map((alarm, i) => (
               <li key={i}>
                 <span className="alarm-num">{i + 1}</span>
                 <input
                   type="time"
+                  step={900}
                   aria-label={`Alarm ${i + 1}`}
                   value={formatTime(alarm)}
                   onChange={(e) => handleEditAlarm(i, e.target.value)}
@@ -154,7 +160,7 @@ export default function App() {
             ))}
           </ol>
           <button type="button" className="primary" onClick={handleSetAlarms}>
-            🔔 Set alarms
+            Remind me
           </button>
           {!isIOS() && (
             <p className="hint">
