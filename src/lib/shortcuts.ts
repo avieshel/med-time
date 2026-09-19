@@ -19,6 +19,17 @@ export const ALARM_LABELS = [
   "Med-Time 3",
 ] as const;
 
+/**
+ * Deleter shortcut: removes ALL alarms in the ALARM_LABEL_PREFIX scope.
+ * Takes no input. Opened by the app's Clear button (after confirm) so
+ * "Clear" resets the Clock app too, not just local state.
+ */
+export const CLEAR_SHORTCUT_NAME = "Clear Med Alarms";
+
+export function buildClearShortcutUrl(): string {
+  return `shortcuts://run-shortcut?name=${encodeURIComponent(CLEAR_SHORTCUT_NAME)}`;
+}
+
 export function buildShortcutUrl(times: [string, string, string]): string {
   // Apple URL-scheme spec: `input` is the MODE ("text" or "clipboard"),
   // the payload goes in `text`. (Passing the payload as `input=` delivers

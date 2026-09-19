@@ -203,6 +203,17 @@ Legend: `[ ]` pending · `[x]` done. Timestamps format: `YYYY-MM-DD HH:MM`.
 - [x] Task 18 — Explicit-slot single shortcut
   - Started at: 2026-09-18 15:45
   - Completed: 2026-09-19 09:57
+
+### Task 19 — "Clear" resets everything incl. device alarms
+- [ ] Task 19 — Clear resets everything
+  - Started at: 2026-09-19 10:05
+  - Completed: _
+  - Do: second one-time shortcut `Clear Med Alarms` (Find Label contains
+    Med-Time → Delete, no input). App Clear button: confirm → archive local
+    plan → clear local state → open deleter link. Button always visible
+    (stale alarms can outlive the local plan after day rollover).
+  - Verify: `npm test` + `npm run build` green, push, deploy green; on phone:
+    set alarms → Clear → confirm → Clock has zero Med-Time alarms.
   - Do: keep ONE shortcut (app can only fire one URL per tap; two runs risk
     a delete-without-create half-state). Simplify its body: no Repeat /
     Repeat Index — explicit Get-Item-at-Index 1/2/3 → Create Alarm with

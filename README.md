@@ -10,8 +10,9 @@ How it works: Mom opens the app, sets the first-pill time, sees the 3 alarm
 times, and taps **Set alarms**. The app hands the times to a one-time iOS
 Shortcut (built once, below), which deletes the previous Med-Time alarms and
 creates 3 real Clock alarms labeled `Med-Time 1`, `Med-Time 2`, `Med-Time 3`.
-iOS gives web apps no way to touch alarms directly — the Shortcut is the
-bridge. Live at https://avieshel.github.io/med-time/.
+**Clear** runs a second tiny shortcut that deletes all Med-Time alarms and
+resets the app. iOS gives web apps no way to touch alarms directly — the
+Shortcuts are the bridge. Live at https://avieshel.github.io/med-time/.
 
 ## Put it on her iPhone
 
@@ -69,6 +70,23 @@ shortcuts://run-shortcut?name=Med%20Alarms&input=text&text=12%3A00%2C15%3A00%2C1
 Clock must show exactly `Med-Time 1` (12:00), `Med-Time 2` (15:00),
 `Med-Time 3` (18:00), all ON. Run it again — still exactly 3, never 6.
 Then the app's **Set alarms** button works the same way.
+
+## Build the `Clear Med Alarms` shortcut (same phone, same idea)
+
+The app's **Clear** button opens this after a confirmation dialog. It takes
+no input — just wipes the app's alarms so "Clear" truly resets everything.
+
+1. New shortcut, rename to exactly `Clear Med Alarms` → Done.
+2. Add **Find Alarms** → **Add Filter** → `Label` `contains` `Med-Time`.
+3. Add **Delete Alarms** right after. Tap `>` on both actions, turn off
+   **Show When Run**. (Step 0's deletion permission covers this one too.)
+4. Done. Test in Safari (alarms may or may not exist — both are fine):
+
+```text
+shortcuts://run-shortcut?name=Clear%20Med%20Alarms
+```
+
+Clock must contain zero `Med-Time` alarms afterwards.
 
 If a step fails, note the step number and the exact message — that's what
 we'll debug next. URL format per Apple:

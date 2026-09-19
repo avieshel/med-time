@@ -2,7 +2,9 @@ import { describe, expect, it } from "vitest";
 import {
   ALARM_LABEL_PREFIX,
   ALARM_LABELS,
+  buildClearShortcutUrl,
   buildShortcutUrl,
+  CLEAR_SHORTCUT_NAME,
   SHORTCUT_NAME,
 } from "./shortcuts";
 
@@ -25,5 +27,14 @@ describe("alarm labels", () => {
       expect(label.startsWith(ALARM_LABEL_PREFIX)).toBe(true);
     }
     expect(new Set(ALARM_LABELS).size).toBe(3); // unique per slot
+  });
+});
+
+describe("buildClearShortcutUrl", () => {
+  it("opens the deleter shortcut with no input", () => {
+    expect(CLEAR_SHORTCUT_NAME).toBe("Clear Med Alarms");
+    expect(buildClearShortcutUrl()).toBe(
+      "shortcuts://run-shortcut?name=Clear%20Med%20Alarms",
+    );
   });
 });

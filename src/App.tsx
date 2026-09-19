@@ -7,7 +7,7 @@ import {
   previewAlarms,
   roundToQuarter,
 } from "./lib/schedule";
-import { buildShortcutUrl, isIOS } from "./lib/shortcuts";
+import { buildClearShortcutUrl, buildShortcutUrl, isIOS } from "./lib/shortcuts";
 import {
   appendHistory,
   clearToday,
@@ -70,17 +70,20 @@ export default function App() {
       .every((t, i) => t === previewTimes[i]);
 
   function handleClear() {
-    if (!today) return;
     const ok = window.confirm(
-      "Clear today's alarms? They will be kept under Previous days.",
+      "Clear today's plan and delete all Med-Time alarms from the Clock app? Previous days are kept.",
     );
     if (!ok) return;
-    appendHistory(toHistory(today));
+    if (today) appendHistory(toHistory(today));
     clearToday();
     setToday(null);
     setHistory(loadHistory());
     setDraftFirst(defaultDraft());
     setError("");
+    // Reset the device too: stale alarms can outlive the local plan
+    // (e.g. after day rollover), so the deleter always runs — it no-ops
+    // when there is nothing to delete.
+    window.location.href = buildClearShortcutUrl();
   }
 
   function handleSetAlarms() {
@@ -153,13 +156,11 @@ export default function App() {
           Set alarms
         </button>
 
-        {today && (
-          <div className="row">
-            <button type="button" className="danger" onClick={handleClear}>
-              Clear
-            </button>
-          </div>
-        )}
+        <div className="row">
+          <button type="button" className="danger" onClick={handleClear}>
+            {today ? "Clear" : "Clear Med-Time alarms"}
+          </button>
+        </div>
 
         {!isIOS() && previewTimes && (
           <p className="hint">
