@@ -198,6 +198,19 @@ Legend: `[ ]` pending · `[x]` done. Timestamps format: `YYYY-MM-DD HH:MM`.
 - [x] Task 17 — Fix input bug, trim README, verified shortcut steps
   - Started at: 2026-09-18 15:30
   - Completed: 2026-09-18 15:35
+
+### Task 18 — Explicit-slot single shortcut (no Repeat) + deletion-gate steps
+- [ ] Task 18 — Explicit-slot single shortcut
+  - Started at: 2026-09-18 15:45
+  - Completed: _
+  - Do: keep ONE shortcut (app can only fire one URL per tap; two runs risk
+    a delete-without-create half-state). Simplify its body: no Repeat /
+    Repeat Index — explicit Get-Item-at-Index 1/2/3 → Create Alarm with
+    fixed labels. Correct filter field to Label (not Name). Document the
+    deletion confirmation gate (Settings → Apps → Shortcuts → Advanced →
+    Allow Deleting Without Confirmation + first-run Always Allow).
+  - Verify: user rebuilds shortcut on her phone per new steps; Clock shows
+    exactly Med-Time 1/2/3; re-run stays at 3.
   - Do: per Apple ("Run a shortcut using a URL scheme"), payload belongs in
     `text=` with `input=text` — we wrongly put times in `input=` so the
     shortcut got nothing. Fix builder + test. Remove bogus "Receive input"

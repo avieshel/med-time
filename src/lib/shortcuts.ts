@@ -5,7 +5,8 @@
  *  the PWA cannot read the Clock app at all):
  *  every run deletes ALL alarms whose label contains ALARM_LABEL_PREFIX,
  *  then creates one alarm per slot with the matching ALARM_LABELS entry
- *  (via the Repeat Index). Steady state is always exactly these 3 alarms.
+ *  (explicit Get-Item-at-Index 1/2/3 → Create Alarm, no Repeat needed).
+ *  Steady state is always exactly these 3 alarms.
  *  Labels are sequence-based (1/2/3), not time-of-day — the times shift
  *  with wake-up time, so a "Noon" label would lie on late days.
  */
