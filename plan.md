@@ -205,9 +205,9 @@ Legend: `[ ]` pending · `[x]` done. Timestamps format: `YYYY-MM-DD HH:MM`.
   - Completed: 2026-09-19 09:57
 
 ### Task 19 — "Clear" resets everything incl. device alarms
-- [ ] Task 19 — Clear resets everything
+- [x] Task 19 — Clear resets everything
   - Started at: 2026-09-19 10:05
-  - Completed: _
+  - Completed: 2026-09-19 10:10
   - Do: second one-time shortcut `Clear Med Alarms` (Find Label contains
     Med-Time → Delete, no input). App Clear button: confirm → archive local
     plan → clear local state → open deleter link. Button always visible
