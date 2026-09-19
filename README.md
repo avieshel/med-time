@@ -22,42 +22,57 @@ Shortcuts are the bridge. Live at https://avieshel.github.io/med-time/.
 
 ## Build the `Med Alarms` shortcut (once, on her iPhone)
 
-One shortcut, not two: the app can only open a single `shortcuts://` link
-per tap, so delete-then-create must live as ordered actions inside one
-shortcut (actions always run top-to-bottom). Two separate runs could strand
-her with alarms deleted but never recreated — one shortcut can't do that.
+One shortcut does the whole job, top to bottom: **wipe old, read the new
+times, create 3 alarms.** (The app can only hand off once per tap, so all
+three phases must live in this one shortcut. Calling a "create one" shortcut
+three times is not reliable: taps 2 and 3 die when the app switches away.)
 
-The shortcut name must be exactly `Med Alarms` — the app calls it by name.
-Add each action with the `+` / search bar in the editor.
+The shortcut name must be exactly `Med Alarms`. Add actions with `+`/search.
 
-**0. Allow deletion first (iOS blocks it otherwise — do this before testing).**
-Settings → Apps → Shortcuts → Advanced → turn ON **Allow Deleting Without
-Confirmation**. (On older iOS: Settings → Shortcuts → Advanced.)
+**0. Allow deletion (do this first).** Settings → Apps → Shortcuts →
+Advanced → **Allow Deleting Without Confirmation** ON. (Older iOS: Settings
+→ Shortcuts → Advanced.) Without this, step 2 silently does nothing.
 
-**1. Create and name it.** Shortcuts → `+` → tap the title → Rename →
-`Med Alarms` → Done.
+**1. Name it.** Shortcuts → `+` → tap the title → Rename → `Med Alarms`.
 
-**2. Split the times.** Add **Split Text**. Tap its input, choose the
-**Shortcut Input** variable (the times arrive here automatically from the
-app), separator **Custom** `,`. Result: a list of 3 times.
+**2. Wipe yesterday's alarms.**
+- Add **Find Alarms**. It searches Clock on its own — wire nothing. Tap
+  **Add Filter**, set `Label` `contains` `Med-Time`.
+  PASS: you see "Find Alarms where Label contains Med-Time".
+- Add **Delete Alarms** directly below. It auto-takes the found alarms —
+  touch nothing.
+  PASS: two stacked actions, no red warnings.
 
-**3. Wipe yesterday's alarms.** Add **Find Alarms** → **Add Filter** →
-`Label` `contains` `Med-Time`. Then add **Delete Alarms** directly after
-(it automatically takes the alarms found in step 3). Nothing else is touched
-— just never label any other alarm `Med-Time`.
+**3. Read the 3 times the app sends (e.g. `12:00,15:00,18:00`).**
+- Add **Split Text**. Tap the blue `Text` field — a row of variables pops up
+  above the keyboard — tap **Shortcut Input**. Set the separator to
+  **Custom** and type `,`.
+  PASS: you see "Split Shortcut Input by Custom Separator ','".
 
-**4. Recreate slot 1.** Add **Get Item from List** → **Item at Index** `1`
-(tap its list field, choose the **Split Text** result). Add **Create Alarm**:
-Time = that item, Label = `Med-Time 1`, Repeat = Never, toggled ON. Tap `>`
-on the action, turn off **Show When Run**.
+**4. Create alarm 1.**
+- Add **Get Item from List**. Tap `List` — variables row — tap **Split
+  Text**. Set it to **Item at Index** → `1`.
+  PASS: you see "Get Item at Index 1 from Split Text".
+- Add **Create Alarm**. Leave **Time** alone — it already holds the item
+  from the line above. Tap **Label**, type `Med-Time 1`. Leave **Repeat**
+  at Never, switch ON. Tap `>` on the action, turn off **Show When Run**.
+  PASS: a Create Alarm with your label, switch on.
 
-**5. Same for slots 2 and 3.** Repeat step 4 with Index `2` → label
-`Med-Time 2`, and Index `3` → label `Med-Time 3`. No Repeat/loop actions
-anywhere — just 3 explicit pairs.
+**5. Alarm 2.** Repeat step 4 exactly: Index `2`, label `Med-Time 2`.
 
-**6. Grant permission.** With at least one alarm on the phone, run the
-shortcut once from the editor (▶). When it asks about deleting, choose
-**Always Allow**. Also allow Clock access if asked. Done.
+**6. Alarm 3.** Repeat step 4 exactly: Index `3`, label `Med-Time 3`.
+
+**7. Permissions.** With any alarm on the phone, press the play button once.
+Choose **Always Allow** for deleting, **Allow** for Clock access. Done.
+
+If something misbehaves:
+- *Delete does nothing* → redo step 0, then step 7's Always Allow.
+- *Alarm created at a wrong time, or the Time field is red* → insert **Get
+  Date from Input** between Get Item and Create Alarm, and set Time to its
+  result.
+- *The app opens the shortcut but nothing happens* → the name must be
+  exactly `Med Alarms`; retest with the Safari URL below and report the
+  step number.
 
 ## Test it (without the app)
 
@@ -88,6 +103,5 @@ shortcuts://run-shortcut?name=Clear%20Med%20Alarms
 
 Clock must contain zero `Med-Time` alarms afterwards.
 
-If a step fails, note the step number and the exact message — that's what
-we'll debug next. URL format per Apple:
+URL format per Apple:
 <https://support.apple.com/guide/shortcuts/run-a-shortcut-from-a-url-apd624386f42/ios>

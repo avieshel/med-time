@@ -208,6 +208,17 @@ Legend: `[ ]` pending · `[x]` done. Timestamps format: `YYYY-MM-DD HH:MM`.
 - [x] Task 19 — Clear resets everything
   - Started at: 2026-09-19 10:05
   - Completed: 2026-09-19 10:10
+
+### Task 20 — Wipe-first shortcut order + foolproof create steps
+- [ ] Task 20 — Wipe-first shortcut order
+  - Started at: 2026-09-19 10:15
+  - Completed: _
+  - Do: reorder to Find → Delete → Split → 3× (Get Item + Create) so the
+    flow reads clear-then-build; rewrite steps with plain tap language +
+    "you should see" checks per action; add 3-line troubleshooting
+    (deletion gate, Show When Run, Get-Date-from-Input fallback). No app
+    code change (single-handoff constraint documented in README).
+  - Verify: user rebuilds on her phone; Safari test URL yields exactly 3.
   - Do: second one-time shortcut `Clear Med Alarms` (Find Label contains
     Med-Time → Delete, no input). App Clear button: confirm → archive local
     plan → clear local state → open deleter link. Button always visible
