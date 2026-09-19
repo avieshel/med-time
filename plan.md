@@ -210,9 +210,9 @@ Legend: `[ ]` pending · `[x]` done. Timestamps format: `YYYY-MM-DD HH:MM`.
   - Completed: 2026-09-19 10:10
 
 ### Task 20 — Wipe-first shortcut order + foolproof create steps
-- [ ] Task 20 — Wipe-first shortcut order
+- [x] Task 20 — Wipe-first shortcut order
   - Started at: 2026-09-19 10:15
-  - Completed: _
+  - Completed: 2026-09-19 10:20
   - Do: reorder to Find → Delete → Split → 3× (Get Item + Create) so the
     flow reads clear-then-build; rewrite steps with plain tap language +
     "you should see" checks per action; add 3-line troubleshooting
