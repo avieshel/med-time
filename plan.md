@@ -200,9 +200,9 @@ Legend: `[ ]` pending · `[x]` done. Timestamps format: `YYYY-MM-DD HH:MM`.
   - Completed: 2026-09-18 15:35
 
 ### Task 18 — Explicit-slot single shortcut (no Repeat) + deletion-gate steps
-- [ ] Task 18 — Explicit-slot single shortcut
+- [x] Task 18 — Explicit-slot single shortcut
   - Started at: 2026-09-18 15:45
-  - Completed: _
+  - Completed: 2026-09-19 09:57
   - Do: keep ONE shortcut (app can only fire one URL per tap; two runs risk
     a delete-without-create half-state). Simplify its body: no Repeat /
     Repeat Index — explicit Get-Item-at-Index 1/2/3 → Create Alarm with
